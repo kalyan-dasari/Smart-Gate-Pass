@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>HOD Approval Panel</h2>
+
+<!-- Move 'View Logs' link OUTSIDE the table -->
+<a href="{{ url_for('hod.logs') }}" style="float:right; margin-bottom:10px;">📜 View Logs</a>
+<br><br>
+
+<table border="1" cellpadding="8">
+  <tr>
+    <th>ID</th>
+    <th>Student</th>
+    <th>Reason</th>
+    <th>Action</th>
+  </tr>
+
+  {% for p in passes %}
+  <tr>
+    <td>{{ p.id }}</td>
+    <td>{{ p.student.name }}</td>
+    <td>{{ p.reason }}</td>
+    <td><a href="{{ url_for('hod.view_request', pass_id=p.id) }}">Review</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

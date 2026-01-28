@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Pending Requests</h2>
+<table>
+  <thead><tr><th>ID</th><th>Student</th><th>Reason</th><th>Requested</th><th>Action</th></tr></thead>
+  <tbody>
+    {% for p in passes %}
+    <tr>
+      <td>{{ p.id }}</td>
+      <td>{{ p.student.name }}</td>
+      <td>{{ p.reason }}</td>
+      <td>{{ p.date_requested.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td><a href="{{ url_for('approver.view_pass', pass_id=p.id) }}">View & Decide</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No pending passes.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

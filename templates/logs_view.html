@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Gate Pass History</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+  <th>ID</th>
+  <th>Student</th>
+  <th>Reason</th>
+  <th>Out Time</th>
+  <th>In Time</th>
+</tr>
+
+{% for p in passes %}
+<tr>
+  <td>{{ p.id }}</td>
+  <td>{{ p.student.name }}</td>
+  <td>{{ p.reason }}</td>
+  <td>{{ p.exit_time }}</td>
+  <td>{{ p.entry_time or '-' }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Your Gate Pass Requests</h2>
+<a href="{{ url_for('student.request_pass') }}" class="btn btn-primary">+ Request Gate Pass</a>
+<br><br>
+
+<table border="1" cellpadding="8">
+<tr>
+  <th>ID</th>
+  <th>Reason</th>
+  <th>From</th>
+  <th>To</th>
+  <th>Status</th>
+  <th>QR Code</th>
+</tr>
+
+{% for p in passes %}
+<tr>
+  <td>{{ p.id }}</td>
+  <td>{{ p.reason }}</td>
+  <td>{{ p.from_time }}</td>
+  <td>{{ p.to_time }}</td>
+  <td>{{ p.status }}</td>
+
+  <td>
+    {% if p.status == 'approved' %}
+        <a href="{{ url_for('student.serve_qr', pass_id=p.id) }}" download>Download QR</a>
+
+    {% else %}
+        Waiting...
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

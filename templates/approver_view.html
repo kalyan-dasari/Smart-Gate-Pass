@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Gate Pass #{{ gp.id }}</h2>
+<p><strong>Student:</strong> {{ gp.student.name }} ({{ gp.student.email }})</p>
+<p><strong>Reason:</strong> {{ gp.reason }}</p>
+<p><strong>Requested:</strong> {{ gp.date_requested }}</p>
+<form method="post" action="{{ url_for('approver.decide', pass_id=gp.id) }}">
+  <label>Remarks (optional)</label><br>
+  <textarea name="remarks" rows="3"></textarea><br>
+  <button type="submit" name="action" value="approve">Approve</button>
+  <button type="submit" name="action" value="reject">Reject</button>
+</form>
+{% endblock %}

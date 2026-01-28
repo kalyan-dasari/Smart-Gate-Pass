@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Request Gate Pass</h2>
+<form method="post">
+  <label>Reason</label><br>
+  <textarea name="reason" rows="4" required></textarea><br><br>
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}

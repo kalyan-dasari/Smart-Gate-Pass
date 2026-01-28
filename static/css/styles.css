@@ -1,0 +1,11 @@
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+.topnav { background:#333; color:#fff; padding:10px; }
+.topnav a { color:#fff; margin-right:10px; text-decoration:none; }
+.container { padding:20px; }
+table { width:100%; border-collapse:collapse; margin-top:10px; }
+table, th, td { border:1px solid #ddd; }
+th, td { padding:8px; text-align:left; }
+.flash { padding:8px; margin-bottom:8px; border-radius:4px; }
+.flash.success { background:#e0f8e9; color:#0b6b3a; }
+.flash.danger { background:#fdecea; color:#7a1f1f; }
+.nav-right { float:right; }

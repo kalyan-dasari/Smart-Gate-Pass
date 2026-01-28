@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Review Gate Pass #{{ gp.id }}</h2>
+
+<p><b>Student:</b> {{ gp.student.name }}</p>
+<p><b>Reason:</b> {{ gp.reason }}</p>
+<p><b>From:</b> {{ gp.from_time }}</p>
+<p><b>To:</b> {{ gp.to_time }}</p>
+<p><b>Parent Contact:</b> {{ gp.parent_contact }}</p>
+
+<form method="post" action="{{ url_for('incharge.decide', pass_id=gp.id) }}">
+  <label>Remarks</label><br>
+  <textarea name="remarks"></textarea><br><br>
+
+  <button name="action" value="approve">Approve & Send to HOD</button>
+  <button name="action" value="reject">Reject</button>
+</form>
+{% endblock %}

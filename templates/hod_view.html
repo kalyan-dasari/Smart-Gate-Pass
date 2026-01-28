@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Approve Gate Pass #{{ gp.id }}</h2>
+
+<p><b>Name:</b> {{ gp.student.name }}</p>
+<p><b>Reason:</b> {{ gp.reason }}</p>
+<p><b>From:</b> {{ gp.from_time }}</p>
+<p><b>To:</b> {{ gp.to_time }}</p>
+
+<form method="POST" action="{{ url_for('hod.decide', pass_id=gp.id) }}">
+<textarea name="remarks" placeholder="Remarks"></textarea><br><br>
+
+<button name="action" value="approve">Approve & Generate QR</button>
+<button name="action" value="reject">Reject</button>
+</form>
+{% endblock %}

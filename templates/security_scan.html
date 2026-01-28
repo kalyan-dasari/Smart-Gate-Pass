@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 style="margin-bottom:15px;">Security QR Scanner</h2>
+
+<video id="camera" width="350" autoplay style="border:2px solid #444; border-radius:10px;"></video>
+<div id="statusBox" style="margin-top:20px; font-size:20px; font-weight:bold;"></div>
+
+<!-- Beep Sound -->
+<audio id="beep" src="{{ url_for('static', filename='beep.mp3') }}"></audio>
+
+<script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
+
+<script>
+
+const video = document.getElementById("camera");
+const box = document.getElementById("statusBox");
+const beep = document.getElementById("beep");
+
+let freeze = false;
+
+// ✅ Start Webcam
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => video.srcObject = stream)
+.catch(() => box.innerHTML = "Camera access blocked ❌");
+
+
+// ✅ Main Scan Loop
+function scanFrame() {
+
+    if (freeze) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0);
+
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(img.data, img.width, img.height);
+
+    if (code) {
+        freeze = true;
+
+        fetch(code.data)
+        .then(r => r.json())
+        .then(res => handleResponse(res))
+        .catch(() => {
+            box.innerHTML = "❌ Error contacting server";
+            freeze = false;
+        });
+    }
+}
+
+setInterval(scanFrame, 800);
+
+
+// ✅ Response Handler
+function handleResponse(res) {
+
+    beep.play();  // ✅ beep sound
+
+    if (res.status === "exit") {
+        box.innerHTML = `✅ EXIT RECORDED<br>Student: ${res.student}<br>${res.time}`;
+    }
+    else if (res.status === "entry") {
+        box.innerHTML = `✅ ENTRY RECORDED<br>Student: ${res.student}<br>${res.time}`;
+    }
+    else if (res.status === "skip") {
+        box.innerHTML = `⚠ Entry ignored (too soon)`;
+    }
+    else if (res.status === "done") {
+        box.innerHTML = `🔁 Already completed`;
+    }
+    else {
+        box.innerHTML = "❌ Invalid QR / Not approved";
+    }
+
+    // ✅ Auto reset scanner
+    setTimeout(() => {
+        freeze = false;
+        box.innerHTML = "Ready to scan...";
+    }, 3000);
+}
+
+</script>
+
+{% endblock %}
