@@ -8,3 +8,4 @@ Pillow==10.0.0
 python-dotenv==1.0.0
 Flask-Mail==0.9.1
 Werkzeug==2.3.7
+twilio==9.3.0

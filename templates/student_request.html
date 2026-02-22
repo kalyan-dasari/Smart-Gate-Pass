@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Request Gate Pass</h2>
-<form method="post">
-  <label>Reason</label><br>
-  <textarea name="reason" required></textarea><br><br>
+<form method="post" class="panel">
+  <label>Reason</label>
+  <textarea name="reason" required></textarea>
 
-  <label>From Time</label><br>
-  <input type="datetime-local" name="from_time" required><br><br>
+  <label>From Time</label>
+  <input type="datetime-local" name="from_time" required>
 
-  <label>To Time</label><br>
-  <input type="datetime-local" name="to_time" required><br><br>
+  <label>To Time</label>
+  <input type="datetime-local" name="to_time" required>
 
-  <label>Parent Contact</label><br>
-  <input type="text" name="parent_contact" required><br><br>
+  <label>Parent Contact</label>
+  <input type="text" name="parent_contact" required>
 
   <button type="submit">Submit Request</button>
 </form>

@@ -1,11 +1,189 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-.topnav { background:#333; color:#fff; padding:10px; }
-.topnav a { color:#fff; margin-right:10px; text-decoration:none; }
-.container { padding:20px; }
-table { width:100%; border-collapse:collapse; margin-top:10px; }
-table, th, td { border:1px solid #ddd; }
-th, td { padding:8px; text-align:left; }
-.flash { padding:8px; margin-bottom:8px; border-radius:4px; }
-.flash.success { background:#e0f8e9; color:#0b6b3a; }
-.flash.danger { background:#fdecea; color:#7a1f1f; }
-.nav-right { float:right; }
+body {
+	margin: 0;
+	font-family: "Segoe UI", Arial, sans-serif;
+	background: #f4f7fb;
+	color: #1f2937;
+}
+
+.topbar {
+	background: linear-gradient(90deg, #0f2d52, #184b84);
+	color: #fff;
+	padding: 12px 24px;
+}
+
+.brand-wrap {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.college-logo {
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.brand-title {
+	margin: 0;
+	font-size: 1.25rem;
+}
+
+.brand-subtitle {
+	margin: 2px 0 0;
+	font-size: 0.85rem;
+	opacity: 0.92;
+}
+
+.topnav {
+	margin-top: 10px;
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.topnav a {
+	color: #fff;
+	text-decoration: none;
+	padding: 8px 12px;
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	border-radius: 8px;
+	font-size: 0.9rem;
+}
+
+.topnav a:hover {
+	background: rgba(255, 255, 255, 0.15);
+}
+
+.page-shell {
+	max-width: 1120px;
+	margin: 18px auto;
+	padding: 0 16px;
+}
+
+.container {
+	background: #fff;
+	border-radius: 12px;
+	padding: 18px;
+	box-shadow: 0 2px 14px rgba(10, 30, 60, 0.08);
+}
+
+.muted {
+	color: #5b6676;
+	font-size: 0.95rem;
+}
+
+.flash {
+	padding: 10px 12px;
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+
+.flash.success { background: #e7f8ef; color: #0b6b3a; border: 1px solid #b8e8cc; }
+.flash.danger { background: #fdeaea; color: #8a1f1f; border: 1px solid #f5c2c2; }
+.flash.info { background: #e9f2ff; color: #194b8f; border: 1px solid #c2dafc; }
+
+h2, h3 { margin-top: 0; color: #102848; }
+
+.btn, button {
+	border: none;
+	border-radius: 8px;
+	padding: 9px 12px;
+	background: #12417a;
+	color: #fff;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.btn.secondary, button.secondary {
+	background: #6b7280;
+}
+
+.btn.danger, button.danger {
+	background: #b11f1f;
+}
+
+form input, form select, form textarea {
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 6px;
+	margin-bottom: 12px;
+	padding: 10px;
+	border: 1px solid #cfd7e3;
+	border-radius: 8px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+}
+
+table th,
+table td {
+	border: 1px solid #e6ebf3;
+	padding: 10px;
+	text-align: left;
+}
+
+table th {
+	background: #f1f5fb;
+}
+
+.grid-two {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.stat-grid {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	margin: 12px 0 18px;
+}
+
+.stat-card {
+	border: 1px solid #e3eaf6;
+	border-radius: 10px;
+	padding: 12px;
+	background: #f9fbff;
+}
+
+.stat-label {
+	color: #55657f;
+	font-size: 0.85rem;
+}
+
+.stat-value {
+	font-size: 1.4rem;
+	margin-top: 4px;
+	color: #103055;
+	font-weight: 700;
+}
+
+.tag {
+	padding: 4px 8px;
+	border-radius: 999px;
+	font-size: 0.78rem;
+	font-weight: 600;
+}
+
+.tag.pending { background: #fff8df; color: #9a6f00; }
+.tag.approved { background: #e5f8eb; color: #0f6b3d; }
+.tag.rejected { background: #ffe8e8; color: #a81818; }
+.tag.scanned { background: #e8efff; color: #1f4f9c; }
+
+.panel {
+	border: 1px solid #e1e8f4;
+	border-radius: 10px;
+	padding: 12px;
+	margin-top: 10px;
+	background: #fff;
+}
+
+.scanner-box {
+	border: 2px solid #314d7a;
+	border-radius: 10px;
+}

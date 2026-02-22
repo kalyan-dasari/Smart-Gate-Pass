@@ -13,15 +13,14 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password_hash, password):
             login_user(user)
-            flash('Login successful')
-            # return redirect(url_for('student.dashboard'))
-            if user.role == 'student':
+            flash('Login successful', 'success')
+            if user.role == Role.STUDENT:
                 return redirect(url_for('student.dashboard'))
-            elif user.role == 'incharge':
+            elif user.role == Role.INCHARGE:
                 return redirect(url_for('incharge.dashboard'))
-            elif user.role == 'hod':
+            elif user.role == Role.HOD:
                 return redirect(url_for('hod.dashboard'))
-            elif user.role == 'security':
+            elif user.role == Role.SECURITY:
                 return redirect(url_for('security.scan_page'))
             else:
                 return redirect(url_for('auth.login'))
@@ -37,11 +36,20 @@ def register():
         name = request.form['name'].strip()
         email = request.form['email'].strip()
         password = request.form['password']
+        phone = request.form.get('phone', '').strip() or None
+        department = request.form.get('department', '').strip() or None
         role = request.form.get('role', Role.STUDENT)
         if User.query.filter_by(email=email).first():
             flash('Email already exists', 'danger')
             return redirect(url_for('auth.register'))
-        user = User(name=name, email=email, password_hash=generate_password_hash(password), role=role)
+        user = User(
+            name=name,
+            email=email,
+            phone=phone,
+            department=department,
+            password_hash=generate_password_hash(password),
+            role=role
+        )
         db.session.add(user)
         db.session.commit()
         flash('User registered, please login', 'success')

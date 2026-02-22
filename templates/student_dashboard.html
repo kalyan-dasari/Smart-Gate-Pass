@@ -2,16 +2,18 @@
 {% block content %}
 
 <h2>Your Gate Pass Requests</h2>
-<a href="{{ url_for('student.request_pass') }}" class="btn btn-primary">+ Request Gate Pass</a>
+<a href="{{ url_for('student.request_pass') }}" class="btn">+ Request Gate Pass</a>
 <br><br>
 
-<table border="1" cellpadding="8">
+<table>
 <tr>
   <th>ID</th>
   <th>Reason</th>
   <th>From</th>
   <th>To</th>
   <th>Status</th>
+  <th>In-Charge Remark</th>
+  <th>HOD Remark</th>
   <th>QR Code</th>
 </tr>
 
@@ -21,14 +23,30 @@
   <td>{{ p.reason }}</td>
   <td>{{ p.from_time }}</td>
   <td>{{ p.to_time }}</td>
-  <td>{{ p.status }}</td>
+  <td>
+    {% if p.status == 'approved' %}
+      <span class="tag approved">Approved</span>
+    {% elif p.status == 'rejected' %}
+      <span class="tag rejected">Rejected</span>
+    {% elif p.status == 'pending_hod' %}
+      <span class="tag pending">Pending at HOD</span>
+    {% elif p.status == 'pending_incharge' %}
+      <span class="tag pending">Pending at In-Charge</span>
+    {% elif p.status in ['scanned_exit', 'scanned_entry'] %}
+      <span class="tag scanned">Scanned</span>
+    {% else %}
+      <span class="tag pending">{{ p.status }}</span>
+    {% endif %}
+  </td>
+  <td>{{ p.incharge_remarks or '-' }}</td>
+  <td>{{ p.hod_remarks or '-' }}</td>
 
   <td>
     {% if p.status == 'approved' %}
         <a href="{{ url_for('student.serve_qr', pass_id=p.id) }}" download>Download QR</a>
 
     {% else %}
-        Waiting...
+        QR Pending
     {% endif %}
   </td>
 </tr>

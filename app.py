@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for
 from config import Config
-from models import db
+from models import db, Role
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
@@ -16,13 +16,13 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
 
-    mail = Mail(app)
+    Mail(app)
 
     # load user function
     from models import User
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
 
     # Import blueprints
     from routes.auth import auth_bp
@@ -43,7 +43,14 @@ def create_app():
     @app.route('/')
     def index():
         if current_user.is_authenticated:
-            return redirect(url_for('student.dashboard'))
+            if current_user.role == Role.STUDENT:
+                return redirect(url_for('student.dashboard'))
+            if current_user.role == Role.INCHARGE:
+                return redirect(url_for('incharge.dashboard'))
+            if current_user.role == Role.HOD:
+                return redirect(url_for('hod.dashboard'))
+            if current_user.role == Role.SECURITY:
+                return redirect(url_for('security.scan_page'))
         return redirect(url_for('auth.login'))
 
     return app

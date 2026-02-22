@@ -2,26 +2,62 @@
 {% block content %}
 <h2>In-Charge Dashboard</h2>
 
-<!-- 'View Logs' link placed before the table -->
-<a href="{{ url_for('incharge.logs') }}" style="float:right; margin-bottom:10px;">📜 View Logs</a>
-<br><br>
+<a href="{{ url_for('incharge.logs') }}" class="btn">View Scan Logs</a>
 
-<table border="1" cellpadding="8">
-  <tr>
-    <th>ID</th>
-    <th>Student</th>
-    <th>Reason</th>
-    <th>Action</th>
-  </tr>
+<div class="grid-two" style="margin-top:12px;">
+  <div class="panel">
+    <h3>Pending Approvals</h3>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Student</th>
+        <th>Reason</th>
+        <th>Action</th>
+      </tr>
 
-  {% for p in passes %}
-  <tr>
-    <td>{{ p.id }}</td>
-    <td>{{ p.student.name }}</td>
-    <td>{{ p.reason }}</td>
-    <td><a href="{{ url_for('incharge.view_request', pass_id=p.id) }}">Review</a></td>
-  </tr>
-  {% endfor %}
-</table>
+      {% for p in passes %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.student.name }}</td>
+        <td>{{ p.reason }}</td>
+        <td><a href="{{ url_for('incharge.view_request', pass_id=p.id) }}">Review</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>Students Requested Today</h3>
+    <table>
+      <tr>
+        <th>Student</th>
+        <th>Department</th>
+        <th>Status</th>
+      </tr>
+      {% for p in today_requests %}
+      <tr>
+        <td>{{ p.student.name }}</td>
+        <td>{{ p.student.department or '-' }}</td>
+        <td>{{ p.status }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h3 style="margin-top:14px;">Currently Outside (Today)</h3>
+    <table>
+      <tr>
+        <th>Student</th>
+        <th>Out Time</th>
+      </tr>
+      {% for p in present_today %}
+      <tr>
+        <td>{{ p.student.name }}</td>
+        <td>{{ p.exit_time }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
 
 {% endblock %}

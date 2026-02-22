@@ -2,26 +2,111 @@
 {% block content %}
 <h2>HOD Approval Panel</h2>
 
-<!-- Move 'View Logs' link OUTSIDE the table -->
-<a href="{{ url_for('hod.logs') }}" style="float:right; margin-bottom:10px;">📜 View Logs</a>
-<br><br>
+<a href="{{ url_for('hod.logs') }}" class="btn">View Scan Logs</a>
 
-<table border="1" cellpadding="8">
-  <tr>
-    <th>ID</th>
-    <th>Student</th>
-    <th>Reason</th>
-    <th>Action</th>
-  </tr>
+<h3 style="margin-top:14px;">Standard Analytics</h3>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total exits today</div>
+    <div class="stat-value">{{ total_exits_today }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Monthly exit count</div>
+    <div class="stat-value">{{ monthly_exit_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Approval rate</div>
+    <div class="stat-value">{{ approval_rate }}%</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Odd-time exits</div>
+    <div class="stat-value">{{ odd_time_count }}</div>
+  </div>
+</div>
 
-  {% for p in passes %}
-  <tr>
-    <td>{{ p.id }}</td>
-    <td>{{ p.student.name }}</td>
-    <td>{{ p.reason }}</td>
-    <td><a href="{{ url_for('hod.view_request', pass_id=p.id) }}">Review</a></td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="grid-two">
+  <div class="panel">
+    <h3>Section-wise Exit Distribution</h3>
+    <table>
+      <tr><th>Section</th><th>Count</th></tr>
+      {% for row in section_distribution %}
+      <tr>
+        <td>{{ row.section }}</td>
+        <td>{{ row.count }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>AI Insights & Alerts</h3>
+    <p>🔴 High-risk students (top 5)</p>
+    <ul>
+      {% for name, count in high_risk_students %}
+        <li>{{ name }} — {{ count }} requests</li>
+      {% endfor %}
+    </ul>
+
+    <p>🟡 Unusual section activity</p>
+    <p class="muted">{{ unusual_section or 'No unusual section activity detected.' }}</p>
+
+    <p>🔵 Abnormal time window detection</p>
+    <p class="muted">{{ odd_time_count }} exits detected outside normal hours.</p>
+
+    <p>🟣 Faculty approval anomaly</p>
+    <ul>
+      {% for alert in lenient_alerts %}
+        <li>{{ alert }}</li>
+      {% endfor %}
+      {% for alert in strict_alerts %}
+        <li>{{ alert }}</li>
+      {% endfor %}
+      {% if not lenient_alerts and not strict_alerts %}
+        <li>No anomaly detected.</li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+<div class="panel" style="margin-top:12px;">
+  <h3>Pending HOD Approvals</h3>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Student</th>
+      <th>Reason</th>
+      <th>Action</th>
+    </tr>
+
+    {% for p in passes %}
+    <tr>
+      <td>{{ p.id }}</td>
+      <td>{{ p.student.name }}</td>
+      <td>{{ p.reason }}</td>
+      <td><a href="{{ url_for('hod.view_request', pass_id=p.id) }}">Review</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="panel" style="margin-top:12px;">
+  <h3>Recent Security Scans</h3>
+  <table>
+    <tr>
+      <th>Pass ID</th>
+      <th>Student</th>
+      <th>Out Time</th>
+      <th>In Time</th>
+    </tr>
+    {% for p in past_scans %}
+    <tr>
+      <td>{{ p.id }}</td>
+      <td>{{ p.student.name }}</td>
+      <td>{{ p.exit_time }}</td>
+      <td>{{ p.entry_time or '-' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 
 {% endblock %}

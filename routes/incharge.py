@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from models import db, GatePass, Role
 from utils.notify import send_email, send_sms
+from datetime import date
 
 incharge_bp = Blueprint('incharge', __name__, url_prefix='/incharge')
 
@@ -14,7 +15,18 @@ def check_role():
 @login_required
 def dashboard():
     passes = GatePass.query.filter_by(status='pending_incharge').order_by(GatePass.date_requested.desc()).all()
-    return render_template('incharge_dashboard.html', passes=passes)
+    today_requests = GatePass.query.filter(db.func.date(GatePass.date_requested) == date.today()).order_by(GatePass.date_requested.desc()).all()
+    present_today = GatePass.query.filter(
+        db.func.date(GatePass.exit_time) == date.today(),
+        GatePass.exit_time.isnot(None),
+        GatePass.entry_time.is_(None)
+    ).order_by(GatePass.exit_time.desc()).all()
+    return render_template(
+        'incharge_dashboard.html',
+        passes=passes,
+        today_requests=today_requests,
+        present_today=present_today
+    )
 
 @incharge_bp.route('/view/<int:pass_id>')
 @login_required
@@ -77,5 +89,5 @@ def decide(pass_id):
 @incharge_bp.route('/logs')
 @login_required
 def logs():
-    passes = GatePass.query.filter(GatePass.exit_time != None).order_by(GatePass.exit_time.desc()).all()
+    passes = GatePass.query.filter(GatePass.exit_time.isnot(None)).order_by(GatePass.exit_time.desc()).all()
     return render_template("logs_view.html", passes=passes)

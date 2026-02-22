@@ -2,8 +2,10 @@
 {% block content %}
 
 <h2 style="margin-bottom:15px;">Security QR Scanner</h2>
+<a href="{{ url_for('security.logs') }}" class="btn">View Scan Logs</a>
+<p class="muted">Scan approved QR to record exit. Entry scan is optional and time-gated.</p>
 
-<video id="camera" width="350" autoplay style="border:2px solid #444; border-radius:10px;"></video>
+<video id="camera" width="350" autoplay class="scanner-box"></video>
 <div id="statusBox" style="margin-top:20px; font-size:20px; font-weight:bold;"></div>
 
 <!-- Beep Sound -->

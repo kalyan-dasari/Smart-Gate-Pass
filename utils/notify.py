@@ -5,7 +5,12 @@ from twilio.rest import Client
 
 def send_email(subject, recipients, body):
     try:
-        with current_app.extensions['mail'].connect() as conn:
+        mail_ext = current_app.extensions.get('mail')
+        if not mail_ext:
+            print("❌ Email error: Flask-Mail extension is not initialized")
+            return False
+
+        with mail_ext.connect() as conn:
             msg = Message(
                 subject,
                 recipients=[recipients],
@@ -23,6 +28,10 @@ def send_email(subject, recipients, body):
 
 def send_sms(to_number, message):
     try:
+        if not (Config.TWILIO_SID and Config.TWILIO_AUTH and Config.TWILIO_FROM):
+            print("❌ SMS error: Twilio credentials missing")
+            return False
+
         client = Client(
             Config.TWILIO_SID,
             Config.TWILIO_AUTH

@@ -8,9 +8,9 @@ approver_bp = Blueprint('approver', __name__, url_prefix='/approver')
 @login_required
 def pending():
     if current_user.role == Role.INCHARGE:
-        passes = GatePass.query.filter_by(status='pending').order_by(GatePass.date_requested.desc()).all()
+        passes = GatePass.query.filter_by(status='pending_incharge').order_by(GatePass.date_requested.desc()).all()
     elif current_user.role == Role.HOD:
-        passes = GatePass.query.filter_by(status='incharge-approved').order_by(GatePass.date_requested.desc()).all()
+        passes = GatePass.query.filter_by(status='pending_hod').order_by(GatePass.date_requested.desc()).all()
     else:
         passes = []
     return render_template('approver_list.html', passes=passes)
@@ -29,7 +29,7 @@ def decide(pass_id):
     remarks = request.form.get('remarks', '').strip()
     if current_user.role == Role.INCHARGE:
         if action == 'approve':
-            gp.status = 'incharge-approved'
+            gp.status = 'pending_hod'
             gp.incharge_remarks = remarks
         else:
             gp.status = 'rejected'

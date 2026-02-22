@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Register</h2>
-<form method="post" action="{{ url_for('auth.register') }}">
-  <label>Name</label><br>
-  <input type="text" name="name" required><br>
-  <label>Email</label><br>
-  <input type="email" name="email" required><br>
-  <label>Password</label><br>
-  <input type="password" name="password" required><br>
-  <label>Role</label><br>
+<form method="post" action="{{ url_for('auth.register') }}" class="panel">
+  <label>Name</label>
+  <input type="text" name="name" required>
+  <label>Email</label>
+  <input type="email" name="email" required>
+  <label>Password</label>
+  <input type="password" name="password" required>
+  <label>Phone (for SMS)</label>
+  <input type="text" name="phone" placeholder="+91XXXXXXXXXX">
+  <label>Department / Section</label>
+  <input type="text" name="department" placeholder="CSE-A">
+  <label>Role</label>
   <select name="role">
     <option value="student">Student</option>
     <option value="incharge">Class In-charge</option>
     <option value="hod">HOD</option>
     <option value="security">Security</option>
-  </select><br><br>
+  </select>
   <button type="submit">Register</button>
 </form>
 {% endblock %}

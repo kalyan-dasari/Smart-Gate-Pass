@@ -29,8 +29,7 @@ last_scan_time = {}  # prevent rapid rescan
 
 @security_bp.route('/verify/<int:pass_id>')
 def verify(pass_id):
-
-    gp = GatePass.query.get(pass_id)
+    gp = db.session.get(GatePass, pass_id)
     if not gp:
         return jsonify({"status": "not_found"})
 
@@ -68,3 +67,10 @@ def verify(pass_id):
             return jsonify({"status": "skip"})
 
     return jsonify({"status": "done"})
+
+
+@security_bp.route('/logs')
+@login_required
+def logs():
+    passes = GatePass.query.filter(GatePass.exit_time.isnot(None)).order_by(GatePass.exit_time.desc()).all()
+    return render_template('logs_view.html', passes=passes)

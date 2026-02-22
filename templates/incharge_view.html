@@ -2,17 +2,19 @@
 {% block content %}
 <h2>Review Gate Pass #{{ gp.id }}</h2>
 
+<div class="panel">
 <p><b>Student:</b> {{ gp.student.name }}</p>
 <p><b>Reason:</b> {{ gp.reason }}</p>
 <p><b>From:</b> {{ gp.from_time }}</p>
 <p><b>To:</b> {{ gp.to_time }}</p>
 <p><b>Parent Contact:</b> {{ gp.parent_contact }}</p>
+</div>
 
-<form method="post" action="{{ url_for('incharge.decide', pass_id=gp.id) }}">
-  <label>Remarks</label><br>
-  <textarea name="remarks"></textarea><br><br>
+<form method="post" action="{{ url_for('incharge.decide', pass_id=gp.id) }}" class="panel">
+  <label>Remarks</label>
+  <textarea name="remarks"></textarea>
 
   <button name="action" value="approve">Approve & Send to HOD</button>
-  <button name="action" value="reject">Reject</button>
+  <button name="action" value="reject" class="danger">Reject</button>
 </form>
 {% endblock %}

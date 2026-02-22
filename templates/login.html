@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Login</h2>
-<form method="post" action="{{ url_for('auth.login') }}">
-  <label>Email</label><br>
-  <input type="email" name="email" required><br>
-  <label>Password</label><br>
-  <input type="password" name="password" required><br><br>
+<h2>Portal Login</h2>
+<p class="muted">Use your registered college account to continue.</p>
+<form method="post" action="{{ url_for('auth.login') }}" class="panel">
+  <label>Email</label>
+  <input type="email" name="email" required>
+  <label>Password</label>
+  <input type="password" name="password" required>
   <button type="submit">Login</button>
 </form>
-<p>Or <a href="{{ url_for('auth.register') }}">Register</a> (for testing)</p>
+<p class="muted">New user? <a href="{{ url_for('auth.register') }}">Register here</a></p>
 {% endblock %}

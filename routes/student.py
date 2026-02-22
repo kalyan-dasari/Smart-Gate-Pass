@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from models import db, GatePass
-from flask import send_from_directory, flash, redirect, url_for
+from flask import send_from_directory
 import os
 
 student_bp = Blueprint('student', __name__, url_prefix='/student')
@@ -10,7 +10,7 @@ student_bp = Blueprint('student', __name__, url_prefix='/student')
 @login_required
 def dashboard():
     # Student sees only their gate passes
-    passes = GatePass.query.filter_by(student_id=current_user.id).order_by(GatePass.date_requested.desc()).all()
+    passes = GatePass.query.filter_by(student_id=current_user.id).order_by(GatePass.id.desc()).all()
     return render_template('student_dashboard.html', passes=passes)
 
 @student_bp.route('/request', methods=['GET','POST'])
@@ -42,7 +42,9 @@ def request_pass():
 @student_bp.route('/qr/<int:pass_id>')
 @login_required
 def serve_qr(pass_id):
-    gp = GatePass.query.get_or_404(pass_id)
+    gp = db.session.get(GatePass, pass_id)
+    if not gp:
+        return "Not found", 404
 
     if gp.student_id != current_user.id:
         return "Unauthorized", 403
