@@ -20,8 +20,8 @@
   <td>{{ p.student.name }}</td>
   <td>{{ p.student.department or '-' }}</td>
   <td>{{ p.reason }}</td>
-  <td>{{ p.exit_time }}</td>
-  <td>{{ p.entry_time or '-' }}</td>
+  <td>{{ p.exit_time|dt_short }}</td>
+  <td>{{ p.entry_time|dt_short }}</td>
   <td>{{ p.status }}</td>
 </tr>
 {% endfor %}

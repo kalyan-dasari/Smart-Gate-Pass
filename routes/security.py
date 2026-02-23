@@ -5,6 +5,10 @@ from datetime import datetime, timedelta
 
 security_bp = Blueprint('security', __name__, url_prefix='/security')
 
+
+def _dt_short(value):
+    return value.strftime('%Y-%m-%d %H:%M') if value else None
+
 # ✅ BEFORE REQUEST: only scanner page requires login
 @security_bp.before_request
 def protect_routes():
@@ -50,7 +54,7 @@ def verify(pass_id):
         return jsonify({
             "status": "exit",
             "student": gp.student.name,
-            "time": str(gp.exit_time)
+            "time": _dt_short(gp.exit_time)
         })
 
     # ✅ Second scan → IN (Optional)
@@ -61,7 +65,7 @@ def verify(pass_id):
             return jsonify({
                 "status": "entry",
                 "student": gp.student.name,
-                "time": str(gp.entry_time)
+                "time": _dt_short(gp.entry_time)
             })
         else:
             return jsonify({"status": "skip"})

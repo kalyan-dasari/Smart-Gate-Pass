@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>HOD Approval Panel</h2>
+<div class="dashboard-head">
+  <div>
+    <h2>HOD Dashboard</h2>
+    <p class="muted">Review requests, monitor activity, and track AI alerts in one place.</p>
+  </div>
+  <a href="{{ url_for('hod.logs') }}" class="btn">View Scan Logs</a>
+</div>
 
-<a href="{{ url_for('hod.logs') }}" class="btn">View Scan Logs</a>
-
-<h3 style="margin-top:14px;">Standard Analytics</h3>
+<h3 class="section-title">Overview</h3>
 <div class="stat-grid">
   <div class="stat-card">
-    <div class="stat-label">Total exits today</div>
+    <div class="stat-label">Exits Today</div>
     <div class="stat-value">{{ total_exits_today }}</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">Monthly exit count</div>
+    <div class="stat-label">Exits This Month</div>
     <div class="stat-value">{{ monthly_exit_count }}</div>
   </div>
   <div class="stat-card">
@@ -26,7 +30,7 @@
 
 <div class="grid-two">
   <div class="panel">
-    <h3>Section-wise Exit Distribution</h3>
+    <h3 class="panel-title">Section-wise Exit Distribution</h3>
     <table>
       <tr><th>Section</th><th>Count</th></tr>
       {% for row in section_distribution %}
@@ -38,43 +42,57 @@
     </table>
   </div>
 
-  <div class="panel">
-    <h3>AI Insights & Alerts</h3>
-    <p>🔴 High-risk students (top 5)</p>
-    <ul>
-      {% for name, count in high_risk_students %}
-        <li>{{ name }} — {{ count }} requests</li>
-      {% endfor %}
-    </ul>
+  <div class="panel insights-panel">
+    <h3 class="panel-title">AI Insights & Alerts</h3>
 
-    <p>🟡 Unusual section activity</p>
-    <p class="muted">{{ unusual_section or 'No unusual section activity detected.' }}</p>
-
-    <p>🔵 Abnormal time window detection</p>
-    <p class="muted">{{ odd_time_count }} exits detected outside normal hours.</p>
-
-    <p>🟣 Faculty approval anomaly</p>
-    <ul>
-      {% for alert in lenient_alerts %}
-        <li>{{ alert }}</li>
-      {% endfor %}
-      {% for alert in strict_alerts %}
-        <li>{{ alert }}</li>
-      {% endfor %}
-      {% if not lenient_alerts and not strict_alerts %}
-        <li>No anomaly detected.</li>
+    <div class="alert-item critical">
+      <div class="alert-title">High-risk students (Top 5)</div>
+      {% if high_risk_students %}
+      <ul>
+        {% for name, count in high_risk_students %}
+          <li>{{ name }} — {{ count }} requests</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="muted">No high-risk trend detected.</p>
       {% endif %}
-    </ul>
+    </div>
+
+    <div class="alert-item warning">
+      <div class="alert-title">Unusual section activity</div>
+      <p class="muted">{{ unusual_section or 'No unusual section activity detected.' }}</p>
+    </div>
+
+    <div class="alert-item info">
+      <div class="alert-title">Abnormal time window</div>
+      <p class="muted">{{ odd_time_count }} exits detected outside normal hours.</p>
+    </div>
+
+    <div class="alert-item neutral">
+      <div class="alert-title">Faculty approval anomaly</div>
+      <ul>
+        {% for alert in lenient_alerts %}
+          <li>{{ alert }}</li>
+        {% endfor %}
+        {% for alert in strict_alerts %}
+          <li>{{ alert }}</li>
+        {% endfor %}
+        {% if not lenient_alerts and not strict_alerts %}
+          <li>No anomaly detected.</li>
+        {% endif %}
+      </ul>
+    </div>
   </div>
 </div>
 
 <div class="panel" style="margin-top:12px;">
-  <h3>Pending HOD Approvals</h3>
+  <h3 class="panel-title">Pending HOD Approvals</h3>
   <table>
     <tr>
       <th>ID</th>
       <th>Student</th>
       <th>Reason</th>
+      <th>Requested</th>
       <th>Action</th>
     </tr>
 
@@ -83,6 +101,7 @@
       <td>{{ p.id }}</td>
       <td>{{ p.student.name }}</td>
       <td>{{ p.reason }}</td>
+      <td>{{ p.date_requested|dt_short }}</td>
       <td><a href="{{ url_for('hod.view_request', pass_id=p.id) }}">Review</a></td>
     </tr>
     {% endfor %}
@@ -90,7 +109,7 @@
 </div>
 
 <div class="panel" style="margin-top:12px;">
-  <h3>Recent Security Scans</h3>
+  <h3 class="panel-title">Recent Security Scans</h3>
   <table>
     <tr>
       <th>Pass ID</th>
@@ -102,8 +121,8 @@
     <tr>
       <td>{{ p.id }}</td>
       <td>{{ p.student.name }}</td>
-      <td>{{ p.exit_time }}</td>
-      <td>{{ p.entry_time or '-' }}</td>
+      <td>{{ p.exit_time|dt_short }}</td>
+      <td>{{ p.entry_time|dt_short }}</td>
     </tr>
     {% endfor %}
   </table>

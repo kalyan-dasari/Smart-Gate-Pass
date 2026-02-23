@@ -2,6 +2,7 @@ from flask_mail import Message
 from config import Config
 from flask import current_app
 from twilio.rest import Client
+import smtplib
 
 def send_email(subject, recipients, body):
     try:
@@ -10,16 +11,26 @@ def send_email(subject, recipients, body):
             print("❌ Email error: Flask-Mail extension is not initialized")
             return False
 
+        if not (Config.MAIL_SERVER and Config.MAIL_PORT and Config.MAIL_USERNAME and Config.MAIL_PASSWORD):
+            print("❌ Email error: Mail configuration is incomplete")
+            return False
+
+        recipient_list = recipients if isinstance(recipients, list) else [recipients]
+
         with mail_ext.connect() as conn:
             msg = Message(
                 subject,
-                recipients=[recipients],
+                recipients=recipient_list,
                 body=body,
                 sender=Config.MAIL_DEFAULT_SENDER
             )
             conn.send(msg)
-        print("✅ Email sent to:", recipients)
+        print("✅ Email sent to:", recipient_list)
         return True
+
+    except smtplib.SMTPAuthenticationError:
+        print("❌ Email error: Gmail rejected credentials. Use a Gmail App Password (16 chars), remove spaces, and enable 2-Step Verification.")
+        return False
 
     except Exception as e:
         print("❌ Email error:", e)

@@ -4,10 +4,19 @@ from models import db, Role
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user
 from flask_mail import Mail
+from datetime import datetime
 
 def create_app():
     app = Flask(__name__, static_folder='static', template_folder='templates')
     app.config.from_object(Config)
+
+    @app.template_filter('dt_short')
+    def dt_short(value):
+        if not value:
+            return '-'
+        if isinstance(value, datetime):
+            return value.strftime('%Y-%m-%d %H:%M')
+        return str(value)
 
     db.init_app(app)
     migrate = Migrate(app, db)
